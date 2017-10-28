@@ -1,6 +1,7 @@
 package hillelee.apple;
 
 import hillelee.defaultMethods.Fruit;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
@@ -11,9 +12,13 @@ import lombok.Getter;
 //@Getter
 
 @Data
+@AllArgsConstructor // see appleSelectorTest
+
 public class Apple implements Fruit {
     private String color;
     private Integer weight;
+
+
 
     /*public Apple() {
     }
