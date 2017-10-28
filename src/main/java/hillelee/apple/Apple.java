@@ -8,12 +8,14 @@ import lombok.Getter;
  * Created by JavaEE on 28.10.2017.
  */
 
-@Getter
+//@Getter
+
+@Data
 public class Apple implements Fruit {
     private String color;
     private Integer weight;
 
-    public Apple() {
+    /*public Apple() {
     }
 
     public Apple(String color, Integer weight) {
@@ -63,5 +65,5 @@ public class Apple implements Fruit {
                 "color='" + color + '\'' +
                 ", weight=" + weight +
                 '}';
-    }
+    }*/
 }
