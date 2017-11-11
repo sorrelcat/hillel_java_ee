@@ -195,4 +195,15 @@ public class AppleSelectorTest {
                 .collect(Collectors.groupingBy(Apple::getColor, toList()));
         System.out.println(collect.get("RED"));
     }
+
+    @Test
+    public void getAllWorms() throws Exception {
+        apples.stream()
+               /* .map(Apple::getWorms) // stream of lists of worms
+                .flatMap(List::stream) // list of strings to stream of strings*/
+
+               .flatMap(apple -> apple.getWorms().stream()) // same but on lambdas
+                .distinct() // deleting same worms
+                .forEach(System.out::println);
+    }
 }
