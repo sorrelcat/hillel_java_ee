@@ -2,12 +2,17 @@ package hillelee.apple;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import hillelee.App;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -25,15 +30,14 @@ public class AppleSelectorTest {
             new Apple("GREEN", 10));
 
     @Test
-    public void selectHeaviest () throws Exception {
+    public void selectHeaviest() throws Exception {
 
         Optional<Apple> mayBeHeaviest = AppleSelector.getHeaviest(apples);
 
-        if(mayBeHeaviest.isPresent()) {
+        if (mayBeHeaviest.isPresent()) {
             Apple heaviest = mayBeHeaviest.get();
             assertThat(heaviest.getWeight(), is(160));
-        }
-        else {
+        } else {
             fail();
         }
     }
@@ -43,7 +47,7 @@ public class AppleSelectorTest {
         List<Apple> apples = ImmutableList.of();
 
         Optional<Apple> mayBeApple = AppleSelector.getHeaviest(apples); // .var
-        if(mayBeApple.isPresent()) {
+        if (mayBeApple.isPresent()) {
             fail(); // 'cause is list of nulls
         }
     }
@@ -97,18 +101,18 @@ public class AppleSelectorTest {
 
         List<Apple> filtered = apples.stream()
                 .filter(heavyAndRed)
-                .collect(Collectors.toList());
+                .collect(toList());
 
-                assertThat(filtered, hasSize(0));
+        assertThat(filtered, hasSize(0));
 
     }
 
     @Test
-    public void mapToColor () throws Exception {
+    public void mapToColor() throws Exception {
         List<String> colors = apples.stream()
                 //.map(apple -> apple.getColor())
                 .map(Apple::getColor) //class as first parameter
-                .collect(Collectors.toList());
+                .collect(toList()); //terminal - return list, not stream
 
         assertThat(colors, hasSize(6));
         assertThat(colors.get(0), is("RED"));
@@ -124,17 +128,71 @@ public class AppleSelectorTest {
     }
 
     @Test
-    public void findExactSame() throws Exception {
-        Apple apple = new Apple("RED", 100);
+    public void adjustColor() throws Exception {
 
-       /* apples.stream()
-                .filter();*/
+        ColorAdjuster colorAdjuster = new ColorAdjuster();
+
+        Function<String, String> adjust = colorAdjuster::adjust;
+        //примет --- вернет. первый параметр вшит. вызывается на объекте, поэтому два параметра
+
+        BiFunction<ColorAdjuster, String, String> adjustWithAdjuster = ColorAdjuster::adjust;
+        //объект, на котором будет вызвана --- примет --- вернет. вызывается на классе, нестатический метод, третий параметр - объект
+
+        apples.stream()
+                .map(Apple::getColor)
+                .map(colorAdjuster::adjust)
+                .forEach(System.out::println); //terminal method - void
     }
 
 
+    @Test
+    public void executionFlow() throws Exception {
+        apples.stream()
+                .filter(apple -> apple.getWeight() > 59)
+                .map(Apple::getColor)
+                .peek(System.out::println) // non-terminal - no print, lazy
+                .limit(3) // first three
+                .collect(toList()); // terminal, returns no stream - if present, method runs and get results
+    }
 
+    @Test
+    public void findFirst() throws Exception {
+        apples.stream()
+                .filter(apple -> apple.getWeight() > 200)
+                .findFirst() //  returns Optional with Apple
+                .map(Apple::getColor) // calls on Optional, not stream. but has same method map(). returns Optional with color
+                .ifPresent(System.out::println);  // for !NullPointerException
+    }
 
+    @Test
+    public void intStream() throws Exception {
+        /*LongSummaryStatistics longSummaryStatistics = apples.stream()
+                .mapToLong(Apple::getWeight) // 'cause stream() in map() is stream of Object
+                .summaryStatistics();*/
 
+        IntSummaryStatistics longSummaryStatistics = apples.stream()
+                .map(Apple::getWeight)
+                //.mapToInt(weight -> weight)
+                .mapToInt(Integer::intValue) // return int instead of Integer
+                .summaryStatistics();
 
+        System.out.println(longSummaryStatistics);
+    }
 
+    @Test
+    public void name() throws Exception {
+        Map<Integer, Apple> weightToApple = apples.stream()
+                .collect(toMap(Apple::getWeight, Function.identity())); // key + value, value == object
+
+        assertThat(weightToApple.get(100), is(apples.get(0)));
+
+    }
+
+    @Test
+    public void groupingBy() throws Exception {
+
+        Map<String, List<Apple>> collect = apples.stream()
+                .collect(Collectors.groupingBy(Apple::getColor, toList()));
+        System.out.println(collect.get("RED"));
+    }
 }
