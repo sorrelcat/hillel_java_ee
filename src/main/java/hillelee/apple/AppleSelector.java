@@ -3,6 +3,7 @@ package hillelee.apple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Created by JavaEE on 28.10.2017.
@@ -40,7 +41,7 @@ public class AppleSelector {
         return result;
     }
 
-    public static List<Apple> filter(List<Apple> apples, ApplePredicate predicate) {
+    /*public static List<Apple> filter(List<Apple> apples, ApplePredicate predicate) {
         List<Apple> result = new ArrayList<>();
         for(Apple apple : apples) {
             if(predicate.test(apple)) {
@@ -48,9 +49,9 @@ public class AppleSelector {
             }
         }
         return result;
-    }
+    }*/
 
-    public static <T> List<T> filter(List<T> items, AnyPredicate predicate) {
+    public static <T> List<T> filter(List<T> items, Predicate predicate) {
         List<T> result = new ArrayList<>();
         for(T item : items) {
             if(predicate.test(item)) {
@@ -63,25 +64,25 @@ public class AppleSelector {
 
 }
 
-interface AnyPredicate<T> { // for any list
+/*interface AnyPredicate<T> { // for any list
     Boolean test(T apple);
-}
+}*/
 
-interface ApplePredicate {
+/*interface ApplePredicate {
     Boolean test(Apple apple);
-}
+}*/
 
-class ColorPredicate implements /*ApplePredicate*/ AnyPredicate<Apple> {
+class ColorPredicate implements /*ApplePredicate*/ Predicate<Apple> {
     @Override
-    public Boolean test(Apple apple) {
+    public boolean test(Apple apple) {
         return apple.getColor().equals("GREEN");
     }
 }
 
-class HeavyPredicate implements ApplePredicate {
+class HeavyPredicate implements Predicate<Apple> {
 
     @Override
-    public Boolean test(Apple apple) {
+    public boolean test(Apple apple) {
         return apple.getWeight() > 120;
     }
 }

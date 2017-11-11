@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -15,20 +17,21 @@ import static org.junit.Assert.*;
  */
 public class AppleSelectorTest {
 
+    List<Apple> apples = ImmutableList.of(new Apple("RED", 100), //ImmutableList not for sort
+            new Apple("RED", 120),
+            new Apple("GOLD", 40),
+            new Apple("GREEN", 160),
+            new Apple("GOLD", 150),
+            new Apple("GREEN", 10));
+
     @Test
     public void selectHeaviest () throws Exception {
-        List<Apple> apples = ImmutableList.of(new Apple("RED", 100),
-                new Apple("RED", 120),
-                new Apple("GOLD", 40),
-                new Apple("GREEN", 60),
-                new Apple("GOLD", 150),
-                new Apple("RED", 10));
 
         Optional<Apple> mayBeHeaviest = AppleSelector.getHeaviest(apples);
 
         if(mayBeHeaviest.isPresent()) {
             Apple heaviest = mayBeHeaviest.get();
-            assertThat(heaviest.getWeight(), is(150));
+            assertThat(heaviest.getWeight(), is(160));
         }
         else {
             fail();
@@ -47,12 +50,6 @@ public class AppleSelectorTest {
 
     @Test
     public void sort() throws Exception {
-        List<Apple> apples = ImmutableList.of(new Apple("RED", 100), //ImmutableList not for sort
-                new Apple("RED", 120),
-                new Apple("GOLD", 40),
-                new Apple("GREEN", 60),
-                new Apple("GOLD", 150),
-                new Apple("RED", 10));
 
         apples = new ArrayList<>(apples);
 
@@ -78,12 +75,6 @@ public class AppleSelectorTest {
 
     @Test
     public void filterByPredicate() throws Exception {
-        List<Apple> apples = ImmutableList.of(new Apple("RED", 100), //ImmutableList not for sort
-                new Apple("RED", 120),
-                new Apple("GOLD", 40),
-                new Apple("GREEN", 60),
-                new Apple("GOLD", 150),
-                new Apple("GREEN", 10));
 
         List<Apple> filtered = AppleSelector.filter(apples, new ColorPredicate());
 
@@ -91,20 +82,58 @@ public class AppleSelectorTest {
 
     }
 
+    Predicate<Apple> heavierThan120 = apple -> apple.getWeight() > 120;
+    Predicate<Apple> isRed = apple -> apple.getColor().equals("RED");
+    Predicate<Apple> heavyAndRed = isRed.and(heavierThan120);
+    Predicate<Apple> heavyAndRed2 = ((Predicate<Apple>) (apple -> apple.getWeight() > 120))
+            .and(apple -> apple.getColor().equals("RED"));
+
+
     @Test
     public void filterByAnonymousPredicate() throws Exception {
-        List<Apple> apples = ImmutableList.of(new Apple("RED", 100), //ImmutableList not for sort
-                new Apple("RED", 120),
-                new Apple("GOLD", 40),
-                new Apple("GREEN", 160),
-                new Apple("GOLD", 150),
-                new Apple("GREEN", 10));
 
-        List<Apple> filtered = AppleSelector.filter(apples, (apple) -> apple.getWeight() > 120);
 
-        assertThat(filtered, hasSize(2));
+        //List<Apple> filtered = AppleSelector.filter(apples, (Apple apple) -> apple.getWeight() > 120);
+
+        List<Apple> filtered = apples.stream()
+                .filter(heavyAndRed)
+                .collect(Collectors.toList());
+
+                assertThat(filtered, hasSize(0));
 
     }
+
+    @Test
+    public void mapToColor () throws Exception {
+        List<String> colors = apples.stream()
+                //.map(apple -> apple.getColor())
+                .map(Apple::getColor) //class as first parameter
+                .collect(Collectors.toList());
+
+        assertThat(colors, hasSize(6));
+        assertThat(colors.get(0), is("RED"));
+    }
+
+    @Test
+    public void printApples() throws Exception {
+        /*apples.stream()
+                .forEach(apple -> System.out.println(apple));
+        */
+        apples.stream()
+                .forEach(System.out::println);
+    }
+
+    @Test
+    public void findExactSame() throws Exception {
+        Apple apple = new Apple("RED", 100);
+
+       /* apples.stream()
+                .filter();*/
+    }
+
+
+
+
 
 
 
