@@ -100,14 +100,6 @@ public class AppleSelectorTest {
                 new Apple("GOLD", 150),
                 new Apple("GREEN", 10));
 
-        /*@Override
-        List<Apple> filtered = AppleSelector.filter(apples, new ApplePredicate() {
-
-            public Boolean test(Apple apple) {
-                return apple.getWeight() > 120;
-            }
-        });*/
-
         List<Apple> filtered = AppleSelector.filter(apples, (apple) -> apple.getWeight() > 120);
 
         assertThat(filtered, hasSize(2));

@@ -49,13 +49,29 @@ public class AppleSelector {
         }
         return result;
     }
+
+    public static <T> List<T> filter(List<T> items, AnyPredicate predicate) {
+        List<T> result = new ArrayList<>();
+        for(T item : items) {
+            if(predicate.test(item)) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+
+}
+
+interface AnyPredicate<T> { // for any list
+    Boolean test(T apple);
 }
 
 interface ApplePredicate {
     Boolean test(Apple apple);
 }
 
-class ColorPredicate implements ApplePredicate {
+class ColorPredicate implements /*ApplePredicate*/ AnyPredicate<Apple> {
     @Override
     public Boolean test(Apple apple) {
         return apple.getColor().equals("GREEN");
