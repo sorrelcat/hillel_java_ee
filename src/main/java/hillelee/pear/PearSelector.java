@@ -25,7 +25,7 @@ public class PearSelector {
 
         @Override
         public boolean test(Pear pear) {
-            return pear.getWeight() <= 50;
+            return pear.getWeight() < 50;
         }
     }
 
@@ -39,7 +39,7 @@ public class PearSelector {
     public static List<Pear> filterHeavy(List<Pear> pears, Integer weight) {
 
         return new ArrayList<>(pears.stream()
-                .filter(pear -> pear.getWeight() <= weight)
+                .filter(pear -> pear.getWeight() < weight)
                 .collect(Collectors.toList()));
     }
 

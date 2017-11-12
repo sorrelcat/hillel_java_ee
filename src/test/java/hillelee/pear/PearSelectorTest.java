@@ -43,7 +43,7 @@ public class PearSelectorTest {
                 new Pear("GOLD", 50),
                 new Pear("RED", 100));
 
-        assertThat(PearSelector.filterHeavy(pears, 50), hasSize(4));
+        assertThat(PearSelector.filterHeavy(pears, 50), hasSize(2));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class PearSelectorTest {
                 new Pear("YELLOW", 50),
                 new Pear("RED", 100));
 
-        assertThat(PearSelector.filter(pears, pear -> pear.getWeight() <= 50), hasSize(4));
+        assertThat(PearSelector.filter(pears, pear -> pear.getWeight() < 50), hasSize(2));
         assertThat(PearSelector.filter(pears, pear -> pear.getColor().equals("YELLOW")), hasSize(2));
 
     }
