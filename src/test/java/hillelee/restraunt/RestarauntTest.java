@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -118,9 +119,38 @@ public class RestarauntTest {
         Map<DishType, IntSummaryStatistics> dishGroupsByType = restaraunt.getMenu().stream()
                 .collect(Collectors.groupingBy(Dish::getType, Collectors.summarizingInt(Dish::getCalories)));
 
-        /*Map<DishType, Double> averageCaloriesInGroup = dishGroupsByType.entrySet().stream()
-                .map()*/ // надо сделать из певой мапы мапу (диштайп, среднее)
+        for (Map.Entry<DishType, IntSummaryStatistics> dishGroup : dishGroupsByType.entrySet()
+                ) {
+            System.out.println(dishGroup.getValue().getAverage());
+        } // вот это надо переделать в стрим
+    }
 
+    @Test
+    public void classicBioDishes() throws Exception {
+
+        Map<DishType, String> bioDishes = new HashMap<>();
+
+        for (DishType dishType : DishType.values()
+             ) {
+            bioDishes.put(dishType, "");
+        }
+
+        for (Dish dish : restaraunt.getMenu()
+             ) {
+            if(dish.getIsBio()) bioDishes.put(dish.getType(), dish + ", " + bioDishes.get(dish.getType()));
+        }
+
+        System.out.println(bioDishes);
+    }
+
+    @Test
+    public void streamBioDishes() throws Exception {
+
+        Map<DishType, /*List<String>*/ List<Dish>> bioDishesGroupList = restaraunt.getMenu().stream()
+                .filter(dish -> dish.getIsBio())
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.toList()));
+
+        System.out.println(bioDishesGroupList);
 
     }
 }
