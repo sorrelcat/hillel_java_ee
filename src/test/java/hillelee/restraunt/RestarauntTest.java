@@ -3,10 +3,7 @@ package hillelee.restraunt;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -88,5 +85,42 @@ public class RestarauntTest {
                 .sorted(Comparator.comparing(Dish::getIsBio).thenComparing(Dish::getName))
                 .peek(System.out::println)
                 .collect(Collectors.toList());
+    }
+
+    @Test
+    public void classicAverageCaloriesByType() throws Exception {
+
+        Map<DishType, Double> dishGroupsCalories = new HashMap<>();
+        for(DishType dishType : DishType.values()) {
+            Double allCalories = .0;
+            Integer countDishes = 0;
+            for (Dish dish : restaraunt.getMenu()
+                 ) {
+                if(dish.getType().equals(dishType)) {
+                    countDishes ++;
+                    allCalories += dish.getCalories();
+                }
+            }
+            dishGroupsCalories.put(dishType, allCalories/countDishes);
+        }
+
+        for (Map.Entry<DishType, Double> dishGroup : dishGroupsCalories.entrySet()
+             ) {
+            System.out.println(dishGroup);
+        }
+
+        assertTrue(dishGroupsCalories.get("VEGETABLES") == 587.5);
+    }
+
+    @Test
+    public void streamAverageCaloriesByType() throws Exception {
+
+        Map<DishType, IntSummaryStatistics> dishGroupsByType = restaraunt.getMenu().stream()
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.summarizingInt(Dish::getCalories)));
+
+        /*Map<DishType, Double> averageCaloriesInGroup = dishGroupsByType.entrySet().stream()
+                .map()*/ // надо сделать из певой мапы мапу (диштайп, среднее)
+
+
     }
 }
