@@ -66,4 +66,27 @@ public class RestarauntTest {
                 .limit(3)
                 .collect(Collectors.toList());
     }
+
+    @Test
+    public void classicSortBioAlphabet() throws Exception {
+
+        List<Dish> mutableMenu = new ArrayList<>();
+        mutableMenu.addAll(restaraunt.getMenu());
+
+        Collections.sort(mutableMenu, Comparator.comparing(Dish::getIsBio).thenComparing(Dish::getName));
+
+        for (Dish dish : mutableMenu
+             ) {
+            System.out.println(dish.toString());
+        }
+    }
+
+    @Test
+    public void streamSortBioAlphabet() throws Exception {
+
+        restaraunt.getMenu().stream()
+                .sorted(Comparator.comparing(Dish::getIsBio).thenComparing(Dish::getName))
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+    }
 }
