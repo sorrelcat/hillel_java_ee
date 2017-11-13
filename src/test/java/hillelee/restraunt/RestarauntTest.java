@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -116,13 +114,11 @@ public class RestarauntTest {
     @Test
     public void streamAverageCaloriesByType() throws Exception {
 
-        Map<DishType, IntSummaryStatistics> dishGroupsByType = restaraunt.getMenu().stream()
-                .collect(Collectors.groupingBy(Dish::getType, Collectors.summarizingInt(Dish::getCalories)));
+        Map<DishType, Double> dishGroupsByType = restaraunt.getMenu().stream()
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.averagingDouble(Dish::getCalories)));
 
-        for (Map.Entry<DishType, IntSummaryStatistics> dishGroup : dishGroupsByType.entrySet()
-                ) {
-            System.out.println(dishGroup.getValue().getAverage());
-        } // вот это надо переделать в стрим
+        System.out.println(dishGroupsByType);
+
     }
 
     @Test
