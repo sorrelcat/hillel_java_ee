@@ -107,33 +107,33 @@ public class RestarauntTest {
              ) {
             System.out.println(dishGroup);
         }
-
-        assertTrue(dishGroupsCalories.get("VEGETABLES") == 587.5);
     }
 
     @Test
     public void streamAverageCaloriesByType() throws Exception {
 
-        Map<DishType, Double> dishGroupsByType = restaraunt.getMenu().stream()
+        Map<DishType, Double> dishGroupsCalories = restaraunt.getMenu().stream()
                 .collect(Collectors.groupingBy(Dish::getType, Collectors.averagingDouble(Dish::getCalories)));
 
-        System.out.println(dishGroupsByType);
-
+        System.out.println(dishGroupsCalories);
     }
 
     @Test
     public void classicBioDishes() throws Exception {
 
-        Map<DishType, String> bioDishes = new HashMap<>();
+        Map<DishType, List<String>> bioDishes = new HashMap<>();
 
         for (DishType dishType : DishType.values()
              ) {
-            bioDishes.put(dishType, "");
+            bioDishes.put(dishType, new ArrayList<>());
         }
 
         for (Dish dish : restaraunt.getMenu()
              ) {
-            if(dish.getIsBio()) bioDishes.put(dish.getType(), dish + ", " + bioDishes.get(dish.getType()));
+            if(dish.getIsBio())
+            {
+                bioDishes.get(dish.getType()).add(dish.getName());
+            }
         }
 
         System.out.println(bioDishes);
@@ -142,11 +142,10 @@ public class RestarauntTest {
     @Test
     public void streamBioDishes() throws Exception {
 
-        Map<DishType, /*List<String>*/ List<Dish>> bioDishesGroupList = restaraunt.getMenu().stream()
+        Map<DishType, List<String>> bioDishesGroupList = restaraunt.getMenu().stream()
                 .filter(dish -> dish.getIsBio())
-                .collect(Collectors.groupingBy(Dish::getType, Collectors.toList()));
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.mapping(Dish::getName, Collectors.toList())));
 
         System.out.println(bioDishesGroupList);
-
     }
 }
