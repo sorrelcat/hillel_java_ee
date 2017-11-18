@@ -2,8 +2,13 @@ package hillelee.knight;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,68 +20,40 @@ public class FairyTale {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext("hillelee");
 
-        //Knight knight = new Knight(new Quest());
+        Knight knight1 = ctx.getBean(Knight.class);
+        Knight knight2 = ctx.getBean(Knight.class);
 
-        //System.out.println(ctx.getBean(Knight.class));
-        System.out.println(ctx.getBean("knight")); // first letter in classname to lowcase
+        System.out.println("Knight: " + knight1);
+        System.out.println("Knights are same: " + (knight1 == knight2));
+        System.out.println("Quests are same: " + (knight1.getQuest() == knight2.getQuest()));
+
+        //System.out.println(ctx.getBean(Knight.class)); // first letter in classname to lowcase. can find by name of by class
 
     }
 }
 
-@Component
+@Configuration // component of specific type
+class Config {
+
+    @Bean
+    //@Scope
+    public Knight knight (Quest quest) {
+        return new Knight(quest);
+    }
+}
+
 @Data
+//@Component("myKnight")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // not singletone
 class Knight {
 
     private final Quest quest;
 
-    /*@Autowired
-    public Knight(Quest quest) {
-        this.quest = quest;
-    }
-
-    *//*public Knight() {
-    }*//*
-
-    public Quest getQuest() {
-        return quest;
-    }
-
-    *//*@Autowired
-    public void setQuest(Quest quest) {
-        this.quest = quest;
-    }*//*
-
-    @Override
-    public String toString() {
-        return "Knight{" +
-                "quest=" + quest +
-                '}';
-    }*/
 }
 
+@Data
 @Component
 class Quest {
     private String task = "Kill the Dragon";
 
-    public Quest(String task) {
-        this.task = task;
-    }
-
-    public Quest() {
-    }
-
-    public String getTask() {
-        return task;
-    }
-
-    @Override
-    public String toString() {
-        return "Quest{" +
-                "task='" + task + '\'' +
-                '}';
-    }
-
-    public void setTask(String task) {
-        this.task = task;
-    }
 }

@@ -113,7 +113,7 @@ public class RestarauntTest {
     public void streamAverageCaloriesByType() throws Exception {
 
         Map<DishType, Double> dishGroupsCalories = restaraunt.getMenu().stream()
-                .collect(Collectors.groupingBy(Dish::getType, Collectors.averagingDouble(Dish::getCalories)));
+                .collect(Collectors.groupingBy(Dish::getType, Collectors.averagingInt(Dish::getCalories)));
 
         System.out.println(dishGroupsCalories);
     }
