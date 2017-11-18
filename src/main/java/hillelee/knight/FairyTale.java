@@ -3,12 +3,10 @@ package hillelee.knight;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,9 +35,27 @@ class Config {
 
     @Bean
     //@Scope
-    public Knight knight (Quest quest) {
+    public Knight knight (/*@Qualifier("quest")*/ Quest quest) {
         return new Knight(quest);
     }
+
+    @Bean
+    @Primary
+    Quest killDragon() {
+        return new Quest("Kill dragon");
+    }
+
+    @Bean
+    Quest rescuePrincess() {
+        return new Quest("Rescue the Princess");
+    }
+
+    @Bean
+    String task() {
+        return "do nothing";
+    }
+
+
 }
 
 @Data
@@ -54,6 +70,6 @@ class Knight {
 @Data
 @Component
 class Quest {
-    private String task = "Kill the Dragon";
+    private final String task;
 
 }
