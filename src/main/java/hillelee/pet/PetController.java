@@ -2,11 +2,9 @@ package hillelee.pet;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,21 +50,47 @@ public class PetController {
     }
 
     @GetMapping("/pets/{id}")
-    public ResponseEntity<Pet> getPetById(@PathVariable Integer id) {
+    public ResponseEntity<?> getPetById(@PathVariable Integer id) {
         if(id >= pets.size()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest()
+                    .body(new ErrorBody("there is no pet with id = " + id));
         }else {
             return ResponseEntity.ok(pets.get(id));
         }
     }
 
+    @PostMapping("/pets")
+    public void createPet(@RequestBody Pet pet) {
+        pets.add(pet);
+    }
+
+    @PutMapping("/pets/{id}")
+    public void updatePet(@PathVariable Integer id,
+                          @RequestBody Pet pet) {
+        pets.set(id, pet);
+    }
+
+    @DeleteMapping("/pets/{id}")
+    public void deletePet(@PathVariable Integer id) {
+        pets.remove(id.intValue());
+    }
+
     private Predicate<Pet> filterBySpecie(String specie) {
         return pet -> pet.getSpecie().equals(specie);
     }
+
 }
 
 @Data
 @AllArgsConstructor
+class ErrorBody{
+    private final Integer number = 400;
+    private String body;
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 class Pet {
     private String name;
     private String specie;
