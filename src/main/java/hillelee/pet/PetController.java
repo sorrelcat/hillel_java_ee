@@ -2,7 +2,9 @@ package hillelee.pet;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +32,8 @@ public class PetController {
     }
 
     @GetMapping("/pets")
-    public List<Pet> getPets(@RequestParam Optional<String> specie) {
+    public List<Pet> getPets(@RequestParam Optional<String> specie, // по умолчанию необязательный
+                             @RequestParam String gentle) {         // по умолчанию обязательный
 
         Predicate<Pet> specieFilter = specie.map(this::filterBySpecie)
                 .orElse(pet -> true);
@@ -46,6 +49,15 @@ public class PetController {
                     .filter(pet -> pet.getSpecie().equals(specie.get()))
                     .collect(Collectors.toList());
         }*/
+    }
+
+    @GetMapping("/pets/{id}")
+    public ResponseEntity<Pet> getPetById(@PathVariable Integer id) {
+        if(id >= pets.size()) {
+            return ResponseEntity.notFound().build();
+        }else {
+            return ResponseEntity.ok(pets.get(id));
+        }
     }
 
     private Predicate<Pet> filterBySpecie(String specie) {
