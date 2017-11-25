@@ -14,3 +14,6 @@ Site `start.spring.io`
 `java -jar build\libs\hillel_java_ee_4-0.0.1-SNAPSHOT.jar`
 
 `springboot executable jar`
+
+## JSON transformer
+Jackson
