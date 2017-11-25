@@ -3,12 +3,12 @@ package hillelee.pet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -19,9 +19,12 @@ import java.util.stream.Collectors;
 @RestController
 public class PetController {
 
-    private List<Pet> pets = new ArrayList<Pet>() {{
-        add(new Pet("Tom", "Cat", 3));
-        add(new Pet("Jerry", "Mouse", 1));
+    private Integer counter = 1;
+
+    private Map<Integer, Pet> pets = new HashMap<Integer, Pet>()
+    {{
+        put(0, new Pet("Tom", "Cat", 3));
+        put(1, new Pet("Jerry", "Mouse", 1));
     }};
 
     @GetMapping(value = "/greeting")
@@ -29,24 +32,30 @@ public class PetController {
         return "Hello world! ";
     }
 
+    private Predicate<Pet> filterBySpecie(String specie) {
+        return pet -> pet.getSpecie().equals(specie);
+    }
+
+    private Predicate<Pet> filterByAge(Integer age) {
+        return pet -> pet.getAge().equals(age);
+    }
+
     @GetMapping("/pets")
-    public List<Pet> getPets(@RequestParam Optional<String> specie, // по умолчанию необязательный
-                             @RequestParam String gentle) {         // по умолчанию обязательный
+    public List<Pet> getPets(@RequestParam Optional<String> specie,
+                             @RequestParam Optional<Integer> age) {
 
         Predicate<Pet> specieFilter = specie.map(this::filterBySpecie)
                 .orElse(pet -> true);
 
-        return pets.stream()
-                .filter(specieFilter)
-                .collect(Collectors.toList());
+        Predicate<Pet> ageFilter = age.map(this::filterByAge)
+                .orElse(pet -> true);
 
-        /*if(!specie.isPresent()) {
-            return pets;
-        } else {
-            return pets.stream()
-                    .filter(pet -> pet.getSpecie().equals(specie.get()))
-                    .collect(Collectors.toList());
-        }*/
+        Predicate<Pet> complexFilter = ageFilter.and(specieFilter);
+
+
+        return pets.values().stream()
+                .filter(complexFilter)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/pets/{id}")
@@ -60,31 +69,38 @@ public class PetController {
     }
 
     @PostMapping("/pets")
-    public void createPet(@RequestBody Pet pet) {
-        pets.add(pet);
+    public ResponseEntity<Void> createPet(@RequestBody Pet pet) {
+        pets.put(++counter, pet);
+        return ResponseEntity.created(URI.create("/pets/" + counter)).build();
     }
 
     @PutMapping("/pets/{id}")
     public void updatePet(@PathVariable Integer id,
                           @RequestBody Pet pet) {
-        pets.set(id, pet);
+        pets.put(id, pet);
     }
 
     @DeleteMapping("/pets/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePet(@PathVariable Integer id) {
-        pets.remove(id.intValue());
-    }
 
-    private Predicate<Pet> filterBySpecie(String specie) {
-        return pet -> pet.getSpecie().equals(specie);
+        if(!pets.containsKey(id)) {
+            throw new NoSuchPetExcetion();
+        }
+        pets.remove(id);
+        //return ResponseEntity.noContent().build();
     }
+}
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+class NoSuchPetExcetion extends RuntimeException{
 
 }
 
 @Data
 @AllArgsConstructor
 class ErrorBody{
-    private final Integer number = 400;
+    private final Integer code = 400;
     private String body;
 }
 
