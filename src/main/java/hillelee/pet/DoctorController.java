@@ -88,7 +88,7 @@ POST /doctros возвращает
                                           @RequestBody Doctor doctor) {
 
         if (!getDoctorById(id).isPresent()) return ResponseEntity.notFound().build();
-        if (doctor.getId() != id) return ResponseEntity.status(404)
+        if (doctor.getId() != id) return ResponseEntity.status(400)
                     .body(String.format("Can't change doctor's id from %d to %d", id, doctor.getId()));
 
         doctors.remove(getDoctorById(id).get());
@@ -123,10 +123,4 @@ class Doctor {
     Integer id;
     String name;
     String specialization;
-
-    public Doctor(String name, String specialization) {
-        this.name = name;
-        this.specialization = specialization;
-        this.id = null;
-    }
 }
