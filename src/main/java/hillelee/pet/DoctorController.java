@@ -111,7 +111,7 @@ POST /doctros возвращает
 
     public Optional<Doctor> getDoctorById(Integer id) {
         return doctors.stream()
-                .filter(doctor -> doctor.getId() == id)
+                .filter(doctor -> doctor.getId().equals(id))
                 .findFirst();
     }
 }
