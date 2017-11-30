@@ -31,14 +31,13 @@ POST /doctros возвращает
 400 если пытаются создать доктора с предопределенным ID     */
 
     @PostMapping("/doctors")
-    public ResponseEntity<?> createDoctor(@RequestParam Doctor doctor) {
-// не работает, если передавать json без id
+    public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
         if (doctor.getId() == null) {
             doctors.add(new Doctor(counter.incrementAndGet(), doctor.getName(), doctor.getSpecialization()));
             return ResponseEntity.created(URI.create("/doctors/" + counter)).build();
         } else {
-            return ResponseEntity.badRequest()
-                    .body(new DoctorErrorBody("Can't create doctor with predetermined id"));
+            return ResponseEntity.status(400)
+                    .body("Can't create doctor with predetermined id");
         }
     }
 
@@ -75,7 +74,8 @@ POST /doctros возвращает
 
         if (getDoctorById(id).isPresent())
             return ResponseEntity.ok(getDoctorById(id).get());
-        else return ResponseEntity.notFound().build();
+
+        return ResponseEntity.notFound().build();
     }
 
     /*    PUT /doctors/{id} возвращает
@@ -88,8 +88,8 @@ POST /doctros возвращает
                                           @RequestBody Doctor doctor) {
 
         if (!getDoctorById(id).isPresent()) return ResponseEntity.notFound().build();
-        if (doctor.getId() != id) return ResponseEntity.badRequest()
-                    .body(new DoctorErrorBody(String.format("Can't change doctor's id from %d to %d", id, doctor.getId())));
+        if (doctor.getId() != id) return ResponseEntity.status(404)
+                    .body(String.format("Can't change doctor's id from %d to %d", id, doctor.getId()));
 
         doctors.remove(getDoctorById(id).get());
         doctors.add(doctor);
@@ -101,7 +101,7 @@ POST /doctros возвращает
 404 если такого доктора не существует     */
 
     @DeleteMapping("doctors/{id}")
-    public ResponseEntity<?> deleteDoctor(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteDoctor(@PathVariable Integer id) {
 
         if (!getDoctorById(id).isPresent()) return ResponseEntity.notFound().build();
 
@@ -129,11 +129,4 @@ class Doctor {
         this.specialization = specialization;
         this.id = null;
     }
-}
-
-@Data
-@AllArgsConstructor
-class DoctorErrorBody {
-    private final Integer code = 400;
-    private String body;
 }
