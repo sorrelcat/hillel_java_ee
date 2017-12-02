@@ -1,8 +1,11 @@
 package hillelee.pet;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,14 +17,11 @@ import java.util.stream.Collectors;
 /**
  * Created by JavaEE on 02.12.2017.
  */
-@Service
+@RequiredArgsConstructor
 public class PetService {
-    private AtomicInteger counter = new AtomicInteger(1);
 
-    private Map<Integer, Pet> pets = new ConcurrentHashMap<Integer, Pet>() {{
-        put(0, new Pet(0, "Tom", "Cat", 3));
-        put(1, new Pet(1, "Jerry", "Mouse", 1));
-    }};
+    private final PetRepository petRepository;
+
 
     public List<Pet> getPets(@RequestParam Optional<String> specie,
                              @RequestParam Optional<Integer> age) {
@@ -34,25 +34,23 @@ public class PetService {
 
         Predicate<Pet> complexFilter = ageFilter.and(specieFilter);
 
-        return pets.values().stream()
+        return petRepository.findAll().stream()
                 .filter(complexFilter)
                 .collect(Collectors.toList());
     }
 
+    public Optional<Pet> getById(Integer id) {
+        return petRepository.findById(id);
+    }
+
     public Pet save(Pet pet) {
-        if (pet.getId() == null) {
-            pet.setId(counter.incrementAndGet());
-        }
-        pets.put(pet.getId(), pet);
-        return pet;
+
+        return petRepository.save(pet);
     }
 
     public Optional<Pet> delete(Integer id) {
-        return Optional.ofNullable(pets.remove(id));
-    }
 
-    public Optional<Pet> getById(Integer id) {
-        return Optional.ofNullable(pets.get(id));
+        return petRepository.delete(id);
     }
 
     private Predicate<Pet> filterBySpecie(String specie) {
