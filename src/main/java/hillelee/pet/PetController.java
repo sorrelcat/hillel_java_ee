@@ -1,5 +1,6 @@
 package hillelee.pet;
 
+import hillelee.util.ErrorBody;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -93,23 +94,8 @@ public class PetController {
     }
 }
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-class NoSuchPetExcetion extends RuntimeException{
 
-}
 
-@Data
-@AllArgsConstructor
-class ErrorBody{
-    private final Integer code = 400;
-    private String body;
-}
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class Pet {
-    private String name;
-    private String specie;
-    private Integer age;
-}
+
+

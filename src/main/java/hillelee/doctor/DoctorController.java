@@ -1,4 +1,4 @@
-package hillelee.pet;
+package hillelee.doctor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -117,10 +117,3 @@ POST /doctros возвращает
 }
 
 
-@Data
-@AllArgsConstructor
-class Doctor {
-    Integer id;
-    String name;
-    String specialization;
-}
