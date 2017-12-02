@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 public class PetController {
 
-    private Integer counter = 1;
+    private AtomicInteger counter = new AtomicInteger(1);
 
     private Map<Integer, Pet> pets = new HashMap<Integer, Pet>()
     {{
@@ -70,7 +71,7 @@ public class PetController {
 
     @PostMapping("/pets")
     public ResponseEntity<Void> createPet(@RequestBody Pet pet) {
-        pets.put(++counter, pet);
+        pets.put(counter.getAndIncrement(), pet);
         return ResponseEntity.created(URI.create("/pets/" + counter)).build();
     }
 
