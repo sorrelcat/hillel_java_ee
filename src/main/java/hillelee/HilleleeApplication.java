@@ -12,5 +12,4 @@ public class HilleleeApplication {
         SpringApplication.run(HilleleeApplication.class, args);
     }
 
-
 }
