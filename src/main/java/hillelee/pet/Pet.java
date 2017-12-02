@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 class Pet {
+    private Integer id;
     private String name;
     private String specie;
     private Integer age;
