@@ -70,6 +70,12 @@ public class PetController {
                 .orElseThrow(NoSuchPetException::new);
 
     }
+
+   /* @ExceptionHandler(MyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void exceptionHandler(MyException exception) {
+        log.error("error throw");
+    }*/
 }
 
 
