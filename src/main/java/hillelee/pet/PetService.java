@@ -2,6 +2,7 @@ package hillelee.pet;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PetService {
 
-    private final PetRepository petRepository;
+    private final JpaPetRepository petRepository;
 
 
     public List<Pet> getPets(@RequestParam Optional<String> specie,
@@ -50,7 +51,13 @@ public class PetService {
 
     public Optional<Pet> delete(Integer id) {
 
-        return petRepository.delete(id);
+        Optional<Pet> mayBePet = petRepository.findById(id);
+        mayBePet.ifPresent(pet -> petRepository.delete(pet.getId()));
+
+        /*mayBePet.map(Pet::getId)
+                .ifPresent(petRepository::delete);*/
+
+        return mayBePet;
     }
 
     private Predicate<Pet> filterBySpecie(String specie) {
