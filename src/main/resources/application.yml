@@ -2,6 +2,12 @@ clinic-info:
   name: 'my clinic'
   working-hours: '8-17'
 
-spring.jackson.property-naming-strategy: SNAKE_CASE
-spring.jpa.show-sql: true
+spring:
+  datasource:
+    url:
+    username: postgres
+    password: postgres
+  jackson.property-naming-strategy: SNAKE_CASE
+  jpa.show-sql: true
+
 logging.level.org.hibernate: DEBUG
