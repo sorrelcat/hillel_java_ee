@@ -9,6 +9,7 @@ import hillelee.pet.PetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
@@ -31,22 +32,23 @@ public class HilleleeConfig {
         return new DoctorService(doctorRepository);
     }
 
-
-
     @Bean
-    CommandLineRunner initDb(JpaRepository repository) {
+    CommandLineRunner initDb(JpaPetRepository petRepository) {
         return args -> {
-            repository.save(new Pet(null, "Tom", "Cat", 3));
-            repository.save(new Pet(null, "Jerry", "Mouse", 1));
+            petRepository.save(new Pet(null, "Tom", "Cat", 3));
+            petRepository.save(new Pet(null, "Jerry", "Mouse", 1));
+
         };
     }
 
-    CommandLineRunner initDoctorDb(JpaRepository repository) {
+    @Bean
+    @Primary
+    CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
         return args -> {
-            repository.save(new Doctor(null, "House", "diagnostician"));
-            repository.save(new Doctor(null, "Chase", "surgeon"));
-            repository.save(new Doctor(null, "Forman", "neurologist"));
-            repository.save(new Doctor(null, "Aisfirstletter", "surgeon"));
+            doctorRepository.save(new Doctor(null, "House", "diagnostician"));
+            doctorRepository.save(new Doctor(null, "Chase", "surgeon"));
+            doctorRepository.save(new Doctor(null, "Forman", "neurologist"));
+            doctorRepository.save(new Doctor(null, "Aisfirstletter", "surgeon"));
         };
     }
 }

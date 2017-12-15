@@ -26,14 +26,6 @@ public class DoctorController {
     GET /doctors?specialization=surgeon возвращает список всех хирургов
     GET /doctors?name=A возвращает список докторов у которых имя начинается на “А” */
 
-    private Predicate<Doctor> filterByFirstLetterInName(String name) {
-        return doctor -> doctor.getName().startsWith(name);
-    }
-
-    private Predicate<Doctor> filterBySpecialization(String specialization) {
-        return doctor -> doctor.getSpecialization().equals(specialization);
-    }
-
     @GetMapping("/doctors")
     public List<Doctor> getDoctors(@RequestParam Optional<String> specialization,
                                    @RequestParam Optional<String> name) {
@@ -85,7 +77,6 @@ POST /doctros возвращает
     @DeleteMapping("doctors/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDoctor(@PathVariable Integer id) {
-
 
         doctorService.delete(id)
                 .orElseThrow(NoSuchDoctorException::new);

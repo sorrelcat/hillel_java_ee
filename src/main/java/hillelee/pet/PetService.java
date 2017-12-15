@@ -68,9 +68,6 @@ public class PetService {
         Optional<Pet> mayBePet = petRepository.findById(id);
         mayBePet.ifPresent(pet -> petRepository.delete(pet.getId()));
 
-        /*mayBePet.map(Pet::getId)
-                .ifPresent(petRepository::delete);*/
-
         return mayBePet;
     }
 
