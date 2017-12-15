@@ -30,11 +30,16 @@ public class DoctorController {
     public List<Doctor> getDoctors(@RequestParam Optional<String> specialization,
                                    @RequestParam Optional<String> name) {
 
-        return doctorService.getDoctorsUsingSeparateJpaMethods(specialization, name);
+        return doctorService.getDoctorsUsingSingleJpaMethod(specialization, name);
+    }
+
+    @GetMapping("/doctors/{specializations}")
+    public List<Doctor> getDoctorsWithAnySpecialisations(@PathVariable List<String> specializations) {
+        return doctorService.getByListOfSpecializations(specializations);
     }
 
     @GetMapping("/doctors/{id}")
-    public ResponseEntity<?> getPetById(@PathVariable Integer id) {
+    public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {
 
         Optional<Doctor> mayBeDoctor = doctorService.getById(id);
 

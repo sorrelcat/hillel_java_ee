@@ -11,22 +11,15 @@ public class DoctorService {
 
     private final JpaDoctorRepository doctorRepository;
 
-    public List<Doctor> getDoctorsUsingSeparateJpaMethods (@RequestParam Optional<String> specialization,
+    public List<Doctor> getDoctorsUsingSingleJpaMethod (@RequestParam Optional<String> specialization,
                                                         @RequestParam Optional<String> name) {
 
-        if(specialization.isPresent() && name.isPresent()) {
-            return doctorRepository.findBySpecializationAndName(specialization.get(), name.get());
-        }
+        return doctorRepository.findNullableBySpecializationAndName(specialization.orElse(null), name.orElse(null));
+    }
 
-        if(specialization.isPresent()) {
-            return doctorRepository.findBySpecialization(specialization.get());
-        }
+    public List<Doctor> getByListOfSpecializations (@RequestParam List<String> specializations) {
 
-        if(name.isPresent()) {
-            return doctorRepository.findByName(name.get());
-        }
-
-        return doctorRepository.findAll();
+        return doctorRepository.findByListOfSpecializations(specializations);
     }
 
     public Optional<Doctor> getById(Integer id) {
