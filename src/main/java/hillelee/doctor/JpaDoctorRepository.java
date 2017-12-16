@@ -22,7 +22,6 @@ public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
             "OR (doctor.specialization IN :specializations)") // !!!
     List<Doctor> findNullableBySpecializationAndName(@Param("name") String name, @Param("specializations") List<String> specializations);
 
-    //doesn't works with *IgnoreCase in function or LOWER UPPER in query. and MEMBER OF instead of IN (((
     //??? postgres lowercase
 
 }

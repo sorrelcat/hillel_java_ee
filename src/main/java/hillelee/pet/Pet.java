@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 /**
  * Created by JavaEE on 02.12.2017.
@@ -23,10 +24,12 @@ public class Pet {
     private String name;
     private String specie;
     private Integer age;
+    private LocalDate birthDate;
 
     public Pet(String name, String specie, Integer age) {
         this.name = name;
         this.specie = specie;
         this.age = age;
+        this.birthDate = birthDate;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class HilleleeConfig {
     @Bean
     CommandLineRunner initDb(JpaPetRepository petRepository) {
         return args -> {
-            petRepository.save(new Pet(null, "Tom", "Cat", 3));
-            petRepository.save(new Pet(null, "Jerry", "Mouse", 1));
+            petRepository.save(new Pet(null, "Tom", "Cat", 3, LocalDate.now()));
+            petRepository.save(new Pet(null, "Jerry", "Mouse", 1, LocalDate.now()));
 
         };
     }
