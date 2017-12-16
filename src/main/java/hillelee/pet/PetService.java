@@ -1,6 +1,7 @@
 package hillelee.pet;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -49,9 +50,15 @@ public class PetService {
        return petRepository.findAll();
     }
 
+    @Transactional
     public List<Pet> getPetsUsingSingleJpaMethod(@RequestParam Optional<String> specie,
                                                  @RequestParam Optional<Integer> age) {
-        return petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+
+        List<Pet> nullableBySpecieAndAge = petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+
+        nullableBySpecieAndAge.forEach(pet -> System.out.println(pet.getPrescriptions()));
+
+        return nullableBySpecieAndAge;
     }
 
     public Optional<Pet> getById(Integer id) {

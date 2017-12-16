@@ -22,8 +22,6 @@ public interface JpaPetRepository extends JpaRepository<Pet, Integer> {
     List<Pet> findByAge(Integer age);
 
     @Query("SELECT pet FROM Pet AS pet " +
-            "JOIN FETCH medical_card" +
-            "JOIN FETCH prescription" +
     "WHERE (pet.specie = :specie OR :specie IS NULL )" +
     " AND (pet.age = :age OR :age IS NULL)")
     List<Pet> findNullableBySpecieAndAge(@Param("specie") String specie, @Param("age") Integer age);
