@@ -4,6 +4,8 @@ import hillelee.converter.HibernateDateConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,8 +29,9 @@ public class Pet {
     //@Convert(converter = HibernateDateConverter.class)
     private LocalDate birthDate;
     @OneToOne(cascade = CascadeType.ALL)
+    //@Fetch(FetchMode.JOIN)
     private MedicalCard medicalCard;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
 
     public Pet(String name, String specie, Integer age, LocalDate birthDate, MedicalCard medicalCard, List<Prescription> prescriptions) {
