@@ -48,7 +48,7 @@ public class HilleleeConfig {
             doctorRepository.save(new Doctor(null, "House", "diagnostician"));
             doctorRepository.save(new Doctor(null, "Chase", "surgeon"));
             doctorRepository.save(new Doctor(null, "Forman", "neurologist"));
-            doctorRepository.save(new Doctor(null, "Aisfirstletter", "surgeon"));
+            doctorRepository.save(new Doctor(null, "Aisfirstletter", "therapeut"));
         };
     }
 }

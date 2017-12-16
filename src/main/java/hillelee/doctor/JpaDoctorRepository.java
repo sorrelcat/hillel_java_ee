@@ -18,11 +18,10 @@ public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
     List<Doctor> findByName(String name);
 
     @Query("SELECT doctor FROM Doctor AS doctor " +
-            "WHERE (doctor.specialization = :specialization OR :specialization IS NULL )" +
-            " AND (LOWER(doctor.name) = LOWER(:name) OR :name IS NULL)")
-    List<Doctor> findNullableBySpecializationAndName(@Param("specialization") String specialization, @Param("name") String name);
+            "WHERE (doctor.name = :name OR :name IS NULL )" +
+            "AND (doctor.specialization IN :specializations)") // !!!
+    List<Doctor> findNullableBySpecializationAndName(@Param("name") String name, @Param("specializations") List<String> specializations);
 
-    @Query("SELECT doctor FROM Doctor AS doctor " +
-    "WHERE doctor.specialization IN :specializations")
-    List<Doctor> findByListOfSpecializations(@Param("specialization") List<String> specializations);
+    //doesn't works with *IgnoreCase in function or LOWER UPPER in query. and MEMBER OF instead of IN (((
+
 }

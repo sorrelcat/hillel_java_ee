@@ -27,15 +27,10 @@ public class DoctorController {
     GET /doctors?name=A возвращает список докторов у которых имя начинается на “А” */
 
     @GetMapping("/doctors")
-    public List<Doctor> getDoctors(@RequestParam Optional<String> specialization,
-                                   @RequestParam Optional<String> name) {
+    public List<Doctor> getDoctors(@RequestParam Optional<String> name,
+                                   @RequestParam(required = false) List<String> specializations) {
 
-        return doctorService.getDoctorsUsingSingleJpaMethod(specialization, name);
-    }
-
-    @GetMapping("/doctors/{specializations}")
-    public List<Doctor> getDoctorsWithAnySpecialisations(@PathVariable List<String> specializations) {
-        return doctorService.getByListOfSpecializations(specializations);
+        return doctorService.getDoctorsUsingSingleJpaMethod(name, specializations);
     }
 
     @GetMapping("/doctors/{id}")
