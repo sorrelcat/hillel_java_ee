@@ -14,4 +14,8 @@ public class Specialization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
+    public Specialization(String name) {
+        this.name = name;
+    }
 }

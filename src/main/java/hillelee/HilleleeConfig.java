@@ -1,8 +1,6 @@
 package hillelee;
 
-import hillelee.doctor.Doctor;
-import hillelee.doctor.DoctorService;
-import hillelee.doctor.JpaDoctorRepository;
+import hillelee.doctor.*;
 import hillelee.pet.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -57,11 +55,22 @@ public class HilleleeConfig {
     @Bean
     @Primary
     CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
+
+        List<Specialization> houseSpecializationList = new ArrayList<>();
+        houseSpecializationList.add(new Specialization("diagnostician"));
+
+        List<Specialization> chaseSpecializationList = new ArrayList<>();
+        houseSpecializationList.add(new Specialization("surgeon"));
+        houseSpecializationList.add(new Specialization("diagnostician"));
+        houseSpecializationList.add(new Specialization("therapeut"));
+
+        List<Record> shedule = new ArrayList<>();
+
         return args -> {
-            doctorRepository.save(new Doctor(null, "House", "diagnostician"));
-            doctorRepository.save(new Doctor(null, "Chase", "surgeon"));
-            doctorRepository.save(new Doctor(null, "Forman", "neurologist"));
-            doctorRepository.save(new Doctor(null, "Aisfirstletter", "therapeut"));
+            doctorRepository.save(new Doctor("House", houseSpecializationList, shedule));
+            doctorRepository.save(new Doctor("Chase", chaseSpecializationList, shedule));
+            doctorRepository.save(new Doctor("Forman", chaseSpecializationList, shedule));
+            doctorRepository.save(new Doctor("Aisfirstletter", chaseSpecializationList, shedule));
         };
     }
 }
