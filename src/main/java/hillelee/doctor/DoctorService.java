@@ -1,8 +1,10 @@
 package hillelee.doctor;
 
+import hillelee.pet.Pet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +14,7 @@ public class DoctorService {
     private final JpaDoctorRepository doctorRepository;
 
     public List<Doctor> getDoctorsUsingSingleJpaMethod (@RequestParam Optional<String> name,
-                                                        @RequestParam List<String> specializations) { //!!!
+                                                        @RequestParam List<Integer> specializations) { //!!!
 
         return doctorRepository.findNullableBySpecializationAndName(name.orElse(null), specializations);
     }
@@ -29,8 +31,18 @@ public class DoctorService {
     public Optional<Doctor> delete(Integer id) {
 
         Optional<Doctor> mayBeDoctor = doctorRepository.findById(id);
-        mayBeDoctor.ifPresent(pet -> doctorRepository.delete(pet.getId()));
+        mayBeDoctor.ifPresent(doctor -> doctorRepository.delete(doctor.getId()));
 
         return mayBeDoctor;
+    }
+
+    public Optional<Doctor> getSheduleByDay(LocalDate day) {
+
+        return doctorRepository.findSheduleByDay(day);
+    }
+
+    public Optional<Record> save(Integer doctorId, LocalDate day, Integer session, Integer petId) {
+
+        return doctorRepository.saveRecord(doctorId, day, session, petId);
     }
 }

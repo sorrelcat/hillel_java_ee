@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by JavaEE on 02.12.2017.
@@ -19,12 +18,15 @@ import javax.persistence.Id;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String name;
-    String specialization;
+    private Integer id;
+    private String name;
+    private  List<Integer> specializations;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Record> shedule;
 
-    public Doctor(String name, String specialization) {
+    public Doctor(String name, List<Integer> specializations, List<Record> shedule) {
         this.name = name;
-        this.specialization = specialization;
+        this.specializations = specializations;
+        this.shedule = shedule;
     }
 }

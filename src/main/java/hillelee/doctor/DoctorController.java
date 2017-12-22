@@ -1,5 +1,6 @@
 package hillelee.doctor;
 
+import hillelee.pet.Pet;
 import hillelee.util.ErrorBody;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +30,7 @@ public class DoctorController {
 
     @GetMapping("/doctors")
     public List<Doctor> getDoctors(@RequestParam Optional<String> name,
-                                   @RequestParam(required = false) List<String> specializations) {
+                                   @RequestParam(required = false) List<Integer> specializations) {
 
         return doctorService.getDoctorsUsingSingleJpaMethod(name, specializations);
     }
@@ -44,6 +46,17 @@ public class DoctorController {
                         .body(new ErrorBody("there is no doctor with id = " + id)));
     }
 
+    @GetMapping("/doctors/{id}/shedule/{day}")
+    public ResponseEntity<?> getDoctorSheduleByDay (@PathVariable LocalDate id, @PathVariable LocalDate day) {
+        Optional<Doctor> mayBeShedule = doctorService.getSheduleByDay(day);
+
+        return mayBeShedule.map(Object.class::cast)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest()
+                        .body(new ErrorBody("there is no shedule for doctor with id = " + id + "and date " + day)));
+    }
+
+
     /*    Create
 POST /doctros возвращает
 201 с указанием пути к созданному доктору
@@ -55,6 +68,14 @@ POST /doctros возвращает
         Doctor saved = doctorService.save(doctor);
 
         return ResponseEntity.created(URI.create("/doctors/" + saved.getId())).build();
+    }
+
+    @PostMapping("/doctors/{id}/schedule/{date}/{session}")
+    public ResponseEntity<Void> createAcceptance(@PathVariable Integer id, @PathVariable LocalDate date, @PathVariable Integer session, @RequestParam Integer petId) {
+
+        Optional<Record> saved = doctorService.save(id, date, session, petId);
+
+        return ResponseEntity.created(URI.create("/doctors/" + saved.get().getId())).build();
     }
 
 
@@ -69,6 +90,7 @@ POST /doctros возвращает
         doctor.setId(id);
         doctorService.save(doctor);
     }
+
 
     /*    DELETE /doctors/{id}
 204 если удаление успешно
