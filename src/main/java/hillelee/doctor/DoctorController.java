@@ -28,12 +28,12 @@ public class DoctorController {
     GET /doctors?specialization=surgeon возвращает список всех хирургов
     GET /doctors?name=A возвращает список докторов у которых имя начинается на “А” */
 
-    @GetMapping("/doctors")
+   /* @GetMapping("/doctors")
     public List<Doctor> getDoctors(@RequestParam Optional<String> name,
                                    @RequestParam(required = false) List<Integer> specializations) {
 
         return doctorService.getDoctorsUsingSingleJpaMethod(name, specializations);
-    }
+    }*/
 
     @GetMapping("/doctors/{id}")
     public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {
@@ -70,13 +70,13 @@ POST /doctros возвращает
         return ResponseEntity.created(URI.create("/doctors/" + saved.getId())).build();
     }
 
-    @PostMapping("/doctors/{id}/schedule/{date}/{session}")
+    /*@PostMapping("/doctors/{id}/schedule/{date}/{session}")
     public ResponseEntity<Void> createAcceptance(@PathVariable Integer id, @PathVariable LocalDate date, @PathVariable Integer session, @RequestParam Integer petId) {
 
         Optional<Record> saved = doctorService.save(id, date, session, petId);
 
         return ResponseEntity.created(URI.create("/doctors/" + saved.get().getId())).build();
-    }
+    }*/
 
 
     /*    PUT /doctors/{id} возвращает

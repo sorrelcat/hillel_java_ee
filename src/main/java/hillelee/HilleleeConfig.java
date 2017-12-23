@@ -51,7 +51,7 @@ public class HilleleeConfig {
 
         };
     }
-
+/*
     @Bean
     @Primary
     CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
@@ -81,5 +81,5 @@ public class HilleleeConfig {
             doctorRepository.save(new Doctor("Forman", chaseSpecializationList, shedule));
             doctorRepository.save(new Doctor("Aisfirstletter", chaseSpecializationList, shedule));
         };
-    }
+    }*/
 }

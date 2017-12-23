@@ -13,11 +13,11 @@ public class DoctorService {
 
     private final JpaDoctorRepository doctorRepository;
 
-    public List<Doctor> getDoctorsUsingSingleJpaMethod (@RequestParam Optional<String> name,
+    /*public List<Doctor> getDoctorsUsingSingleJpaMethod (@RequestParam Optional<String> name,
                                                         @RequestParam List<Integer> specializations) { //!!!
 
         return doctorRepository.findNullableBySpecializationAndName(name.orElse(null), specializations);
-    }
+    }*/
 
     public Optional<Doctor> getById(Integer id) {
         return doctorRepository.findById(id);
@@ -41,8 +41,8 @@ public class DoctorService {
         return doctorRepository.findSheduleByDay(day);
     }*/
 
-    public Optional<Record> save(Integer doctorId, LocalDate day, Integer session, Integer petId) {
+    /*public Optional<Record> save(Integer doctorId, LocalDate day, Integer session, Integer petId) {
 
         return doctorRepository.saveRecord(doctorId, day, session, petId);
-    }
+    }*/
 }
