@@ -18,12 +18,12 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Pet pet;
+    private Integer petId;
     private LocalDate day;
     private Integer session;
 
-    public Record(Pet pet, LocalDate day, Integer session) {
-        this.pet = pet;
+    public Record(Integer petId, LocalDate day, Integer session) {
+        this.petId = petId;
         this.day = day;
         this.session = session;
     }

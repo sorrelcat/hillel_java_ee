@@ -36,10 +36,10 @@ public class DoctorService {
         return mayBeDoctor;
     }
 
-    public Optional<Doctor> getSheduleByDay(LocalDate day) {
+   /* public Optional<Doctor> getSheduleByDay(LocalDate day) {
 
         return doctorRepository.findSheduleByDay(day);
-    }
+    }*/
 
     public Optional<Record> save(Integer doctorId, LocalDate day, Integer session, Integer petId) {
 

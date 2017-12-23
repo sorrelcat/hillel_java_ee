@@ -72,8 +72,8 @@ public class HilleleeConfig {
         houseSpecializationList.add(new Specialization("therapeut"));
 
         List<Record> shedule = new ArrayList<>();
-        shedule.add(new Record(new Pet( "Tom", "Cat", 3, LocalDate.now(), new MedicalCard(LocalDate.now(), "tratatatata"), tomsPrescriptionList), LocalDate.now(), 8));
-        shedule.add(new Record(new Pet( "Jerry", "Mouse", 4, LocalDate.now(), new MedicalCard(LocalDate.now(), "hehehehge"), jerrysPrescriptionList), LocalDate.now(), 9));
+        shedule.add(new Record(1, LocalDate.now(), 8));
+        shedule.add(new Record(2,  LocalDate.now(), 9));
 
         return args -> {
             doctorRepository.save(new Doctor("House", houseSpecializationList, shedule));

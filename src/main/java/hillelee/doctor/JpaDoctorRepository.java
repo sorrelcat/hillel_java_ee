@@ -12,9 +12,9 @@ public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
 
     Optional<Doctor> findById(Integer id);
 
-    List<Doctor> findBySpecializationAndName(Integer specialization, String name);
+    List<Doctor> findBySpecializationsAndName(Integer specialization, String name);
 
-    List<Doctor> findBySpecialization(Integer specialization);
+    List<Doctor> findBySpecializations(Integer specialization);
 
     List<Doctor> findByName(String name);
 
@@ -23,9 +23,7 @@ public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
             "OR ((LOWER(doctor.name) = LOWER(:name)) OR :name IS NULL )")
     List<Doctor> findNullableBySpecializationAndName(@Param("name") String name, @Param("specializations") List<Integer> specializations);
 
-    @Query("SELECT doctor.shedule")
-    Optional<Doctor> findSheduleByDay(LocalDate day);
-
-
     Optional<Record> saveRecord(Integer id, LocalDate day, Integer session, Integer petId);
+
+   // Optional<Doctor> findSheduleByDay(LocalDate day);
 }

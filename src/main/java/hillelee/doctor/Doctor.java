@@ -20,8 +20,9 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @OneToMany(cascade = CascadeType.ALL)
     private  List<Specialization> specializations;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Record> shedule;
 
     public Doctor(String name, List<Specialization> specializations, List<Record> shedule) {

@@ -46,7 +46,7 @@ public class DoctorController {
                         .body(new ErrorBody("there is no doctor with id = " + id)));
     }
 
-    @GetMapping("/doctors/{id}/shedule/{day}")
+   /* @GetMapping("/doctors/{id}/shedule/{day}")
     public ResponseEntity<?> getDoctorSheduleByDay (@PathVariable LocalDate id, @PathVariable LocalDate day) {
         Optional<Doctor> mayBeShedule = doctorService.getSheduleByDay(day);
 
@@ -54,7 +54,7 @@ public class DoctorController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest()
                         .body(new ErrorBody("there is no shedule for doctor with id = " + id + "and date " + day)));
-    }
+    }*/
 
 
     /*    Create
