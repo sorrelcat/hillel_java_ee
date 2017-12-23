@@ -8,7 +8,7 @@ spring:
     username: postgres
     password: postgres
   jackson:
-    property-naming-strategy: SNAKE_CASE
+    #property-naming-strategy: SNAKE_CASE
     serialization:
       write-dates-as-timestamps: false
       indent-output: true

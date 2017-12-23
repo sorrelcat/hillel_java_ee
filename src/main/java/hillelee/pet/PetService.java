@@ -1,9 +1,14 @@
 package hillelee.pet;
 
+import hillelee.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -12,10 +17,13 @@ import java.util.stream.Collectors;
 /**
  * Created by JavaEE on 02.12.2017.
  */
+
+@Service
 @RequiredArgsConstructor
 public class PetService {
 
     private final JpaPetRepository petRepository;
+    private final StoreService storeService;
 
     public List<Pet> getPetsUsingStreamFilters(@RequestParam Optional<String> specie,
                                                @RequestParam Optional<Integer> age) {
@@ -84,5 +92,19 @@ public class PetService {
 
     private Predicate<Pet> filterByAge(Integer age) {
         return pet -> pet.getAge().equals(age);
+    }
+
+    @Transactional
+    @Retryable(ObjectOptimisticLockingFailureException.class)
+    public void prescribe(Integer petId,
+                          String description,
+                          String medicineName,
+                          Integer quantity,
+                          Integer timesPerDay) {
+
+        Pet pet = petRepository.findById(petId).orElseThrow(RuntimeException::new);
+        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay));
+        petRepository.save(pet);
+        storeService.decrement(medicineName, quantity);
     }
 }

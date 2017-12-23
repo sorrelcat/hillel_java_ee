@@ -2,6 +2,8 @@ package hillelee;
 
 import hillelee.doctor.*;
 import hillelee.pet.*;
+import hillelee.store.Medicine;
+import hillelee.store.MedicineRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +20,6 @@ import java.util.List;
 
 @Configuration
 public class HilleleeConfig {
-
-    @Bean
-    public PetService petService(JpaPetRepository petRepository) {
-        return new PetService(petRepository);
-    }
 
     @Bean
     public DoctorService doctorService(JpaDoctorRepository doctorRepository) {
@@ -49,6 +46,13 @@ public class HilleleeConfig {
             petRepository.save(new Pet(null, "Tom", "Cat", 3, LocalDate.now(), tomsCard, tomsPrescriptionList));
             petRepository.save(new Pet(null, "Jerry", "Mouse", 1, LocalDate.now(), jerrysCard, jerrysPrescriptionList));
 
+        };
+    }
+
+    @Bean
+    CommandLineRunner initMedicineStore(MedicineRepository medicineRepository) {
+        return args -> {
+          medicineRepository.save(new Medicine("Brilliant green", 1));
         };
     }
 /*
