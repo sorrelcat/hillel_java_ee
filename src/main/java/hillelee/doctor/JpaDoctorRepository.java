@@ -12,16 +12,19 @@ public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
 
     Optional<Doctor> findById(Integer id);
 
-    List<Doctor> findBySpecializationsAndName(Integer specialization, String name);
+    Optional<Doctor> findByName(String name);
 
-    List<Doctor> findBySpecializations(Integer specialization);
+    List<Doctor> findBySpecializationsAndName(List<Integer> specializations, String name);
 
-    List<Doctor> findByName(String name);
+    List<Doctor> findBySpecializations(List<Integer> specializations);
 
-    /*@Query("SELECT doctor FROM Doctor AS doctor " +
-            "JOIN doctor.specializations s WHERE s IN :specializations) " +
-            "OR ((LOWER(doctor.name) = LOWER(:name)) OR :name IS NULL )")
-    List<Doctor> findNullableBySpecializationAndName(@Param("name") String name, @Param("specializations") List<Integer> specializations);*/
+
+    @Query("SELECT doctor FROM Doctor AS doctor " +
+            "JOIN doctor.specializations s " +
+            "WHERE s IN :specializations " +
+            "OR (doctor.name = :name) " +
+            "OR (:name IS NULL) ")
+    List<Doctor> findNullableBySpecializationsAndName(@Param("name") String name, @Param("specializations") List<Integer> specializations);
 
     //Optional<Record> saveRecord(Integer id, LocalDate day, Integer session, Integer petId);
 

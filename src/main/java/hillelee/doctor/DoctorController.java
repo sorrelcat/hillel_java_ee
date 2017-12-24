@@ -23,17 +23,17 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-    /* GET /doctors возвращает список всех докторов
+    /*GET /doctors возвращает список всех докторов
     GET /doctors/{id} возвращает доктора либо 404
     GET /doctors?specialization=surgeon возвращает список всех хирургов
     GET /doctors?name=A возвращает список докторов у которых имя начинается на “А” */
 
-   /* @GetMapping("/doctors")
+    @GetMapping("/doctors")
     public List<Doctor> getDoctors(@RequestParam Optional<String> name,
                                    @RequestParam(required = false) List<Integer> specializations) {
 
         return doctorService.getDoctorsUsingSingleJpaMethod(name, specializations);
-    }*/
+    }
 
     @GetMapping("/doctors/{id}")
     public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {

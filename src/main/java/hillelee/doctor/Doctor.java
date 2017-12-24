@@ -20,14 +20,11 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private  List<Specialization> specializations;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Record> shedule;
 
-    public Doctor(String name, List<Specialization> specializations, List<Record> shedule) {
+    public Doctor(String name, List<Specialization> specializations) {
         this.name = name;
         this.specializations = specializations;
-        this.shedule = shedule;
     }
 }

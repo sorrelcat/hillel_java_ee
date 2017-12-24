@@ -1,7 +1,6 @@
-package hillelee.doctor;
+package hillelee.shedule;
 
 
-import hillelee.pet.Pet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,11 +17,13 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private Integer doctorId;
     private Integer petId;
     private LocalDate day;
     private Integer session;
 
-    public Record(Integer petId, LocalDate day, Integer session) {
+    public Record(Integer doctorId, Integer petId, LocalDate day, Integer session) {
+        this.doctorId = doctorId;
         this.petId = petId;
         this.day = day;
         this.session = session;

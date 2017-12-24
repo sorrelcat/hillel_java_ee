@@ -2,6 +2,8 @@ package hillelee;
 
 import hillelee.doctor.*;
 import hillelee.pet.*;
+import hillelee.shedule.Record;
+import hillelee.shedule.SheduleRepository;
 import hillelee.store.Medicine;
 import hillelee.store.MedicineRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -55,7 +57,15 @@ public class HilleleeConfig {
           medicineRepository.save(new Medicine("Brilliant green", 1));
         };
     }
-/*
+
+    @Bean
+    CommandLineRunner initShedule(SheduleRepository sheduleRepository) {
+        return args -> {
+          sheduleRepository.save(new Record(1, 1, LocalDate.now(), 8));
+          sheduleRepository.save(new Record(1, 1, LocalDate.of(2017, 12, 24), 9));
+        };
+    }
+
     @Bean
     @Primary
     CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
@@ -71,19 +81,15 @@ public class HilleleeConfig {
         houseSpecializationList.add(new Specialization("diagnostician"));
 
         List<Specialization> chaseSpecializationList = new ArrayList<>();
-        houseSpecializationList.add(new Specialization("surgeon"));
-        houseSpecializationList.add(new Specialization("diagnostician"));
-        houseSpecializationList.add(new Specialization("therapeut"));
-
-        List<Record> shedule = new ArrayList<>();
-        shedule.add(new Record(1, LocalDate.now(), 8));
-        shedule.add(new Record(2,  LocalDate.now(), 9));
+        chaseSpecializationList.add(new Specialization("surgeon"));
+        chaseSpecializationList.add(new Specialization("diagnostician"));
+        chaseSpecializationList.add(new Specialization("therapeut"));
 
         return args -> {
-            doctorRepository.save(new Doctor("House", houseSpecializationList, shedule));
-            doctorRepository.save(new Doctor("Chase", chaseSpecializationList, shedule));
-            doctorRepository.save(new Doctor("Forman", chaseSpecializationList, shedule));
-            doctorRepository.save(new Doctor("Aisfirstletter", chaseSpecializationList, shedule));
+            doctorRepository.save(new Doctor("House", houseSpecializationList));
+            doctorRepository.save(new Doctor("Chase", chaseSpecializationList));
+            doctorRepository.save(new Doctor("Forman", chaseSpecializationList));
+            doctorRepository.save(new Doctor("Aisfirstletter", chaseSpecializationList));
         };
-    }*/
+    }
 }
