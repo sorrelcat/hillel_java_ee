@@ -21,6 +21,9 @@ repositories {
 	mavenCentral()
 }
 
+bootRun {
+	systemProperty 'spring.profiles.active', 'prod'
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
@@ -36,7 +39,7 @@ dependencies {
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
-	//runtime('com.h2database:h2')
+	runtime('com.h2database:h2')
 	runtime('org.postgresql:postgresql')
 }
 
