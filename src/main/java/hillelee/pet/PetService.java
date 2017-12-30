@@ -2,6 +2,8 @@ package hillelee.pet;
 
 import hillelee.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Retryable;
@@ -41,23 +43,23 @@ public class PetService {
                 .collect(Collectors.toList());
     }
 
-    public List<Pet> getPetsUsingSeparateJpaMethods (@RequestParam Optional<String> specie,
-                             @RequestParam Optional<Integer> age,
-                                                     Sort sort) {
+    public Page<Pet> getPetsUsingSeparateJpaMethods (@RequestParam Optional<String> specie,
+                                                     @RequestParam Optional<Integer> age,
+                                                     Pageable pageable) {
 
        if(specie.isPresent() && age.isPresent()) {
-           return petRepository.findBySpecieAndAge(specie.get(), age.get(), sort);
+           return petRepository.findBySpecieAndAge(specie.get(), age.get(), pageable);
        }
 
        if(specie.isPresent()) {
-           return petRepository.findBySpecie(specie.get(), sort);
+           return petRepository.findBySpecie(specie.get(), pageable);
        }
 
        if(age.isPresent()) {
-           return petRepository.findByAge(age.get(), sort);
+           return petRepository.findByAge(age.get(), pageable);
        }
 
-       return petRepository.findAll(sort);
+       return petRepository.findAll(pageable);
     }
 
     @Transactional
