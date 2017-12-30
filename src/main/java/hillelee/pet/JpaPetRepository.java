@@ -1,5 +1,6 @@
 package hillelee.pet;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +17,11 @@ public interface JpaPetRepository extends JpaRepository<Pet, Integer> {
 
     public Optional<Pet> findById(Integer id);
 
-    List<Pet> findBySpecieAndAge(String specie, Integer age);
+    List<Pet> findBySpecieAndAge(String specie, Integer age, Sort sort);
 
-    List<Pet> findBySpecie(String specie);
+    List<Pet> findBySpecie(String specie, Sort sort);
 
-    List<Pet> findByAge(Integer age);
+    List<Pet> findByAge(Integer age, Sort sort);
 
     @Query("SELECT pet FROM Pet AS pet " +
     "WHERE (pet.specie = :specie OR :specie IS NULL)" +

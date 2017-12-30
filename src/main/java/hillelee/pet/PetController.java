@@ -3,6 +3,7 @@ package hillelee.pet;
 import hillelee.pet.dto.PrescriptionInputDto;
 import hillelee.util.ErrorBody;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,10 @@ public class PetController {
 
     @GetMapping("/pets")
     public List<Pet> getPets(@RequestParam Optional<String> specie,
-                             @RequestParam Optional<Integer> age/*,
-                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> birthDate*/) {
-       return petService.getPetsUsingSingleJpaMethod(specie, age/*, birthDate*/);
+                             @RequestParam Optional<Integer> age,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> birthDate,
+                             Sort sort) {
+       return petService.getPetsUsingSeparateJpaMethods(specie, age, sort/*, birthDate*/);
     }
 
 

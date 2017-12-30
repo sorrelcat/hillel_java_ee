@@ -2,6 +2,7 @@ package hillelee.pet;
 
 import hillelee.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -41,21 +42,22 @@ public class PetService {
     }
 
     public List<Pet> getPetsUsingSeparateJpaMethods (@RequestParam Optional<String> specie,
-                             @RequestParam Optional<Integer> age) {
+                             @RequestParam Optional<Integer> age,
+                                                     Sort sort) {
 
        if(specie.isPresent() && age.isPresent()) {
-           return petRepository.findBySpecieAndAge(specie.get(), age.get());
+           return petRepository.findBySpecieAndAge(specie.get(), age.get(), sort);
        }
 
        if(specie.isPresent()) {
-           return petRepository.findBySpecie(specie.get());
+           return petRepository.findBySpecie(specie.get(), sort);
        }
 
        if(age.isPresent()) {
-           return petRepository.findByAge(age.get());
+           return petRepository.findByAge(age.get(), sort);
        }
 
-       return petRepository.findAll();
+       return petRepository.findAll(sort);
     }
 
     @Transactional
