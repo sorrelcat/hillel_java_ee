@@ -22,11 +22,13 @@ public class Prescription {
     private Integer id;
     private String description;
     private LocalDate start;
-    private Integer timesPerDay;
+    private Integer timesPerDay;/*
+    private MedicineType medicineType;*/
 
-    public Prescription(String description, LocalDate start, Integer timesPerDay) {
+    public Prescription(String description, LocalDate start, Integer timesPerDay/*, MedicineType medicineType*/) {
         this.description = description;
         this.start = start;
         this.timesPerDay = timesPerDay;
+        /*this.medicineType = medicineType;*/
     }
 }

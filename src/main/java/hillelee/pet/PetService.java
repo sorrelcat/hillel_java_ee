@@ -59,10 +59,11 @@ public class PetService {
     }
 
     @Transactional
-    public List<Pet> getPetsUsingSingleJpaMethod(@RequestParam Optional<String> specie,
-                                                 @RequestParam Optional<Integer> age) {
+    public List<Pet> getPetsUsingSingleJpaMethod(Optional<String> specie,
+                                                 Optional<Integer> age/*,
+                                                 Optional<LocalDate> birthDate*/) {
 
-        List<Pet> nullableBySpecieAndAge = petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+        List<Pet> nullableBySpecieAndAge = petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null)/*, birthDate.orElse(null)*/);
 
         nullableBySpecieAndAge.forEach(pet -> System.out.println(pet.getPrescriptions()));
 
@@ -103,7 +104,7 @@ public class PetService {
                           Integer timesPerDay) {
 
         Pet pet = petRepository.findById(petId).orElseThrow(RuntimeException::new);
-        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay));
+        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay/*, MedicineType.PERORAL*/));
         petRepository.save(pet);
         storeService.decrement(medicineName, quantity);
     }

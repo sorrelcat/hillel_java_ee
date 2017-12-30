@@ -3,12 +3,15 @@ package hillelee.pet;
 import hillelee.pet.dto.PrescriptionInputDto;
 import hillelee.util.ErrorBody;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
+import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,8 +35,9 @@ public class PetController {
 
     @GetMapping("/pets")
     public List<Pet> getPets(@RequestParam Optional<String> specie,
-                             @RequestParam Optional<Integer> age) {
-       return petService.getPetsUsingSingleJpaMethod(specie, age);
+                             @RequestParam Optional<Integer> age/*,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> birthDate*/) {
+       return petService.getPetsUsingSingleJpaMethod(specie, age/*, birthDate*/);
     }
 
 
@@ -74,7 +78,7 @@ public class PetController {
 
     @PostMapping("/pets/{id}/prescriptions")
     public void prescribe(@PathVariable Integer id,
-                          @RequestBody PrescriptionInputDto dto) {
+                          @Valid @RequestBody PrescriptionInputDto dto) {
         petService.prescribe(id,
                 dto.getDescription(),
                 dto.getMedicineName(),

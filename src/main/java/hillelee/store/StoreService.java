@@ -43,9 +43,9 @@ public class StoreService {
 
         log.warn("read version:" + medicine.getVersion());
 
-        try {
+        /*try {
             TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {}*/
 
         medicine.setQuantity(medicine.getQuantity() - quantity);
         medicineRepository.save(medicine);

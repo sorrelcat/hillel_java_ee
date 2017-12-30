@@ -27,21 +27,22 @@ public class HilleleeConfig {
     }
 
     @Bean
+    @Primary
     CommandLineRunner initDb(JpaPetRepository petRepository) {
         return args -> {
             /*if(petRepository.findAll().isEmpty()) {
                 return;
             }*/
 
-            MedicalCard tomsCard = new MedicalCard(LocalDate.now(), "bla-ble");
+            MedicalCard tomsCard = new MedicalCard(LocalDate.now(), "bla-blah");
             MedicalCard jerrysCard = new MedicalCard(LocalDate.now(), "jerryyy");
 
             List<Prescription> tomsPrescriptionList = new ArrayList<>();
-            tomsPrescriptionList.add(new Prescription("paracetamol", LocalDate.now(), 3));
-            tomsPrescriptionList.add(new Prescription("aspirin", LocalDate.now(), 2));
+            tomsPrescriptionList.add(new Prescription("paracetamol", LocalDate.now(), 3/*, MedicineType.PERORAL*/));
+            tomsPrescriptionList.add(new Prescription("aspirin", LocalDate.now(), 2/*, MedicineType.PERORAL*/));
 
             List<Prescription> jerrysPrescriptionList = new ArrayList<>();
-            jerrysPrescriptionList.add(new Prescription("paracetamol", LocalDate.now(), 5));
+            jerrysPrescriptionList.add(new Prescription("paracetamol", LocalDate.now(), 5/*, MedicineType.PERORAL*/));
 
             petRepository.save(new Pet(null, "Tom", "Cat", 3, LocalDate.now(), tomsCard, tomsPrescriptionList));
             petRepository.save(new Pet(null, "Jerry", "Mouse", 1, LocalDate.now(), jerrysCard, jerrysPrescriptionList));
@@ -57,7 +58,7 @@ public class HilleleeConfig {
     }
 /*
     @Bean
-    @Primary
+
     CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
 
         List<Prescription> tomsPrescriptionList = new ArrayList<>();
