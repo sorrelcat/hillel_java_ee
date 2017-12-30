@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class HilleleeConfig {
     }
 
     @Bean
+    @Profile("prod")
     @Primary
     CommandLineRunner initDb(JpaPetRepository petRepository) {
         return args -> {
@@ -51,6 +53,7 @@ public class HilleleeConfig {
     }
 
     @Bean
+    @Profile("prod")
     CommandLineRunner initMedicineStore(MedicineRepository medicineRepository) {
         return args -> {
           medicineRepository.save(new Medicine("Brilliantum green", 1));
@@ -58,7 +61,6 @@ public class HilleleeConfig {
     }
 /*
     @Bean
-
     CommandLineRunner initDoctorDb(JpaDoctorRepository doctorRepository) {
 
         List<Prescription> tomsPrescriptionList = new ArrayList<>();
