@@ -35,6 +35,9 @@ dependencies {
 
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
+	compile('com.google.guava:guava:23.6-jre')
+
+
 	compileOnly('org.projectlombok:lombok')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')

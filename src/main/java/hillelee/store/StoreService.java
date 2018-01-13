@@ -37,11 +37,14 @@ public class StoreService {
 
         Optional<Medicine> byName = medicineRepository.findByName(medicineName);
 
+        log.warn("read version:" + byName.map(Medicine::getVersion)
+                .orElse(null));
+
         Medicine medicine = byName
                 .filter(m -> m.getQuantity() >= quantity)
                 .orElseThrow(NoSuchMedicineException::new);
 
-        log.warn("read version:" + medicine.getVersion());
+        log.warn("before sleep");
 
         /*try {
             TimeUnit.SECONDS.sleep(2);

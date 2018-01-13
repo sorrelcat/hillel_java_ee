@@ -28,7 +28,7 @@ public class Prescription {
     public Prescription(String description, LocalDate start, Integer timesPerDay/*, MedicineType medicineType*/) {
         this.description = description;
         this.start = start;
-        this.timesPerDay = timesPerDay;
-        /*this.medicineType = medicineType;*/
+        this.timesPerDay = timesPerDay;/*
+        this.medicineType = medicineType;*/
     }
 }
