@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +22,13 @@ public class User implements UserDetails {
     private String username;
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
-    Set<Authority> authorities;
+    Set<Authority> authorities = new HashSet<>();
+
+    public User(String username, String password, String authority) {
+        this.username = username;
+        this.password = password;
+        authorities.add(new Authority(authority));
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

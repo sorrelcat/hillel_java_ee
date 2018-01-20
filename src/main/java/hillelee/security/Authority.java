@@ -13,6 +13,10 @@ import javax.persistence.Entity;
 @Embeddable
 public class Authority  implements GrantedAuthority{
 
-    private String Authority;
+    private String authority;
 
+    public Authority(String authority) {
+
+        this.authority = authority;
+    }
 }

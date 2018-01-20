@@ -6,4 +6,6 @@ package hillelee.security;
 public interface UserRepository {
 
     User findUserByName(String username);
+
+    void save(User user);
 }
