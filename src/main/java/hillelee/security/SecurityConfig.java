@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Created by JavaEE on 13.01.2018.
@@ -34,12 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService)
+        .passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    CommandLineRunner  init() {
-        return args -> userDetailsService.create(new User("max", "123", "create:prescription"));
+    CommandLineRunner  init(PasswordEncoder passwordEncoder) {
+        return args -> userDetailsService.create(new User("max", passwordEncoder.encode("123"), "create:prescription"));
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
 
